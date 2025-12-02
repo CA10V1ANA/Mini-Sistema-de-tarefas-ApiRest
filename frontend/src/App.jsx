@@ -59,7 +59,7 @@ export default function App() {
   return (
     <div className="app">
       <div className="app-header">
-        <h1>Minhas Tarefas</h1>
+        <h1>Minhas Atividades</h1>
         <p>Organize e acompanhe suas atividades</p>
       </div>
       <div className="app-content">
