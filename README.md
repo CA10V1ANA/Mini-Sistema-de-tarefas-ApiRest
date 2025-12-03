@@ -75,26 +75,6 @@ grailsw.bat run-app
 
 O Grails estará disponível em: `http://localhost:8080/lista-tarefa`
 
-### 2. Iniciar o Frontend (React)
-
-Em outro terminal, na pasta `frontend`:
-
-```bash
-cd c:\Users\locem\lista-tarefa\frontend
-npm install
-npm run dev -- --port 3000
-```
-
-**Saída esperada:**
-```
-  VITE v5.x.x  ready in xxx ms
-
-  ➜  Local:   http://localhost:3000/
-  ➜  press h to show help
-```
-
-Abra o navegador em: `http://localhost:3000`
-
 ### 3. Testar a Aplicação
 
 No navegador em `http://localhost:3000`:
