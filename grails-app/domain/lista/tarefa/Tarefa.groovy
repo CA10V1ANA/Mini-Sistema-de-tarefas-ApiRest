@@ -5,10 +5,13 @@ class Tarefa {
     Boolean realizada = false
     Date dataCriacao
     static transients = ['binding']
+    Integer ordem
 
     static constraints = {
         titulo blank: false, nullable: false
         dataCriacao nullable: true
+        ordem nullable: true
+
     }
 
     def beforeInsert() {

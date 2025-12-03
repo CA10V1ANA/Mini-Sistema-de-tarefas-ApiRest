@@ -56,6 +56,27 @@ export default function App() {
     setTarefas(prev => prev.filter(t => t.id !== id))
   }
 
+
+  const reorderTarefas = async (ids) => {
+  try {
+    await fetch('http://localhost:8080/lista-tarefa/api/tarefas/reorder', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(ids)
+    })
+
+    // Atualiza o estado local IMEDIATAMENTE
+    const novaLista = ids.map(id => tarefas.find(t => t.id === id))
+    setTarefas(novaLista)
+
+    // Opcional: recarrega do backend para garantir consistência
+    // fetchTarefas()
+
+  } catch (error) {
+    console.error("Erro ao reordenar:", error)
+  }
+}
+
   return (
     <div className="app">
       <div className="app-header">
@@ -69,7 +90,12 @@ export default function App() {
             <p>Carregando tarefas...</p>
           </div>
         ) : (
-          <TarefaList tarefas={tarefas} onMarkDone={markDone} onDelete={deleteTarefa} />
+          <TarefaList 
+            tarefas={tarefas}
+            onMarkDone={markDone}
+            onDelete={deleteTarefa}
+            onReorder={reorderTarefas}
+          />
         )}
       </div>
     </div>

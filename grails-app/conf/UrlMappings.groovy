@@ -14,6 +14,10 @@ class UrlMappings {
             action = [POST: 'markDone']
         }
 
+        "/api/tarefas/reorder"(controller: 'tarefa') {
+            action = [POST: 'reorder']
+        }
+
         "/$controller/$action?/$id?(.$format)?"{
             constraints {
                 // apply constraints here

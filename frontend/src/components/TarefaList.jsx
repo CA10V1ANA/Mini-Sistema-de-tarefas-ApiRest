@@ -1,6 +1,8 @@
 import React from 'react'
+import { DragDropContext, Droppable } from '@hello-pangea/dnd'
+import TarefaItem from './TarefaItem'
 
-export default function TarefaList({ tarefas, onMarkDone, onDelete }) {
+export default function TarefaList({ tarefas, onMarkDone, onDelete, onReorder }) {
   if (!tarefas || tarefas.length === 0) {
     return (
       <div className="empty-state">
@@ -9,35 +11,34 @@ export default function TarefaList({ tarefas, onMarkDone, onDelete }) {
     )
   }
 
-  const formatDate = (date) => {
-    if (!date) return ''
-    return new Date(date).toLocaleDateString('pt-BR', { 
-      day: '2-digit', 
-      month: 'short', 
-      year: 'numeric' 
-    })
+  const handleDragEnd = (result) => {
+    if (!result.destination) return
+
+    const newOrder = Array.from(tarefas)
+    const [moved] = newOrder.splice(result.source.index, 1)
+    newOrder.splice(result.destination.index, 0, moved)
+
+    onReorder(newOrder.map(t => t.id))
   }
 
   return (
-    <ul className="list">
-      {tarefas.map(t => (
-        <li key={t.id} className={t.realizada ? 'done' : ''}>
-          <div className="titulo-section">
-            <span className="titulo">{t.titulo}</span>
-            {t.dataCriacao && <div className="data">{formatDate(t.dataCriacao)}</div>}
-          </div>
-          <div className="actions">
-            {!t.realizada && (
-              <button className="btn-done" onClick={() => onMarkDone(t.id)}>
-                ✓ Concluir
-              </button>
-            )}
-            <button className="btn-delete" onClick={() => onDelete(t.id)}>
-              🗑 Excluir
-            </button>
-          </div>
-        </li>
-      ))}
-    </ul>
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <Droppable droppableId="tarefas">
+        {(provided) => (
+          <ul ref={provided.innerRef} {...provided.droppableProps} className="list">
+            {tarefas.map((t, index) => (
+              <TarefaItem
+                key={t.id}
+                tarefa={t}
+                index={index}
+                onMarkDone={onMarkDone}
+                onDelete={onDelete}
+              />
+            ))}
+            {provided.placeholder}
+          </ul>
+        )}
+      </Droppable>
+    </DragDropContext>
   )
 }

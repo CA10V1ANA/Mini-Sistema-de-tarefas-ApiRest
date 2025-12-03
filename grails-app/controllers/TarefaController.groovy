@@ -3,11 +3,33 @@ import lista.tarefa.Tarefa
 
 class TarefaController {
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE", markDone: "POST", index: "GET", show: "GET"]
+    static allowedMethods = [
+        save: "POST",
+        update: "PUT",
+        delete: "DELETE",
+        markDone: "POST",
+        reorder: "POST",
+        index: "GET",
+        show: "GET"
+    ]
 
     def index() {
         def tarefas = Tarefa.list(sort: 'dataCriacao', order: 'desc')
         render tarefas as JSON
+    }
+
+    def reorder() {
+        def ids = request.JSON as List<Long>
+
+        ids.eachWithIndex { id, idx ->
+            def t = Tarefa.get(id)
+            if (t) {
+                t.ordem = idx
+                t.save(flush: true)
+            }
+        }
+
+        render([status: "ok"] as JSON)
     }
 
     def show(Long id) {
