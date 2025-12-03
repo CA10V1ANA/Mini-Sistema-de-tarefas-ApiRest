@@ -20,5 +20,6 @@ class Tarefa {
 
     static mapping = {
         dataCriacao column: 'data_criacao'
+        sort "ordem"
     }
 }

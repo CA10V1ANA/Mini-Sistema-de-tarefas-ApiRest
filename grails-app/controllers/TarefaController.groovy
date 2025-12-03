@@ -18,19 +18,23 @@ class TarefaController {
         render tarefas as JSON
     }
 
+    def list() {
+    render Tarefa.list(sort: "ordem", order: "asc") as JSON
+}
+
+
     def reorder() {
-        def ids = request.JSON as List<Long>
+    def lista = request.JSON   // recebe o array do JS
 
-        ids.eachWithIndex { id, idx ->
-            def t = Tarefa.get(id)
-            if (t) {
-                t.ordem = idx
-                t.save(flush: true)
-            }
-        }
-
-        render([status: "ok"] as JSON)
+    lista.each { item ->
+        def tarefa = Tarefa.get(item.id as Long)
+        tarefa.ordem = item.ordem
+        tarefa.save(flush: true)
     }
+
+    render([status: "ok"] as JSON)
+}
+
 
     def show(Long id) {
         def t = Tarefa.get(id)
